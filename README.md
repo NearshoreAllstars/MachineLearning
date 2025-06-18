@@ -28,7 +28,7 @@ Ensure the following CSV files are available in the script's working directory:
 
 - `Forcing_750sim_SF.csv`: Feature matrix for training
 - `TWL_750sim_SF.csv`: Target vector for training
-- `Inputs_GPR_predict_25yr_sim_1.csv`: Feature matrix for prediction
+- `Inputs_GPR_predict_10yr_sim_1.csv`: Feature matrix for prediction
 
 ---
 
@@ -95,7 +95,7 @@ Edit
 ├── multi_gpu_gp_regression.py     # Main script
 ├── Forcing_750sim_SF.csv          # Input features for training
 ├── TWL_750sim_SF.csv              # Output values for training
-├── Inputs_GPR_predict_25yr_sim_1.csv  # Input features for prediction
+├── Inputs_GPR_predict_10yr_sim_1.csv  # Input features for prediction
 ├── LBFGS.py                       # Custom L-BFGS optimizer
 └── README.md
 🙋 Support
