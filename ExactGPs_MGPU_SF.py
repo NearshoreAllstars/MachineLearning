@@ -76,7 +76,7 @@ y_ft.resize_(y_ft.size()[0])
 y = y_ft.to(torch.float32)
 
 # a large number of data points for prediction
-predict_x_df = pd.read_csv('Inputs_GPR_predict_50yr_sim_1.csv')
+predict_x_df = pd.read_csv('Inputs_GPR_predict_10yr_sim_1.csv')
 # Convert DataFrame to a NumPy array
 numpy_array_predict_x = predict_x_df.values
 # Convert NumPy array to a PyTorch tensor
