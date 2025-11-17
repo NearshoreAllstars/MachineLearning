@@ -1,103 +1,157 @@
-# Multi-GPU Exact Gaussian Process Regression
+**Multi-GPU / Multi-CPU Exact Gaussian Process Regression (GPR)
 
-This Python script performs **exact Gaussian Process (GP) regression** using **GPyTorch** with support for **multiple GPUs**. It normalizes the input data, splits it for training and testing, and uses an L-BFGS optimizer to train the GP model. It also supports large-scale predictions efficiently.
+with Parallel Cross-Validation**
 
-## 📍 Author
+This repository provides an accelerated implementation of Exact Gaussian Process Regression (GPR) using GPyTorch and PyTorch, designed for parallel training and prediction on multiple GPUs or multiple CPU cores.
+The code is built to support large scientific datasets—such as long-duration flood driver time series—and enables fast, scalable surrogate modeling for environmental and climate applications.
 
-**Zhenqiang Wang**  
-College of Earth, Ocean, and Atmospheric Sciences  
-Oregon State University, Corvallis, OR 97331  
-📧 [zhenqiang.wang@oregonstate.edu](mailto:zhenqiang.wang@oregonstate.edu)
+The implementation serves as a high-performance alternative to MATLAB-based CPU GPR workflows and has been tested on real-world 500-year compound coastal flooding datasets.
 
----
+Key Features
 
-## 🧠 Features
+Multi-GPU parallelism for both training and inference
 
-- Exact GP regression using GPyTorch
-- Multi-GPU kernel parallelism
-- Custom training with L-BFGS optimizer
-- Support for high-volume prediction datasets
-- Data normalization and train/test split
-- Computes test RMSE and prediction time
+Multi-CPU support for environments without GPUs
 
----
+Full cross-validation in parallel (across GPUs or CPU workers)
 
-## 📂 Input Files
+Automatic hardware detection (all GPUs, single GPU, selected GPU IDs, or CPU)
 
-Ensure the following CSV files are available in the script's working directory:
+Supports very large datasets using GPyTorch's lazy tensors and memory-efficient kernels
 
-- `Forcing_750sim_SF.csv`: Feature matrix for training
-- `TWL_750sim_SF.csv`: Target vector for training
-- `Inputs_GPR_predict_10yr_sim_1.csv`: Feature matrix for prediction
+Automatic batch size tuning and memory cleanup
 
----
+Robust fallback behavior when GPUs are not available
 
-## 🛠 Dependencies
+Compatible with Linux, Windows, and HPC clusters
 
-- Python 3.8+
-- `torch`
-- `gpytorch`
-- `numpy`
-- `pandas`
-- `scikit-learn`
-- `matplotlib`
-- `scipy`
+File Description
+ExactGPs_GPU.py
 
-Install via:
+The main script implementing:
 
-```bash
-pip install torch gpytorch numpy pandas scikit-learn matplotlib scipy
-Also ensure the FullBatchLBFGS optimizer is available (likely a custom module under ../LBFGS.py).
+Exact GPR training using GPyTorch
 
-🚀 How to Run
-Make sure your CUDA environment is set up and GPUs are accessible.
+Multi-GPU and multi-CPU execution
 
-bash
-Copy
-Edit
-python3 multi_gpu_gp_regression.py
-The script will:
+Parallel k-fold cross-validation
 
-Normalize the dataset
+Enhanced prediction using a trained multi-GPU model
 
-Train a GP model using all available GPUs
+Logging, error handling, and automatic resource assignment
 
-Compute RMSE on a test set
+Installation
+1. Clone the repository
+git clone https://github.com/<your-repo>/ExactGPs_GPU.git
+cd ExactGPs_GPU
 
-Perform prediction on a large dataset
+2. Install dependencies
+pip install torch gpytorch pandas numpy scikit-learn
 
-Report prediction time
 
-📈 Output
-Console logs showing:
+(For GPU users, install the CUDA-enabled PyTorch version appropriate for your system.)
 
-Training loss, kernel lengthscale, and noise
+Usage
+Interactive run
+python ExactGPs_GPU.py
 
-Test RMSE
+
+When prompted:
+
+Hardware selection options
+
+Use all GPUs
+
+Use a single GPU
+
+Specify selected GPU IDs
+
+Use CPU only
+
+CPU mode prompt
+
+Enter number of CPU cores to use (default = all available)
+
+Hardware Modes
+Multi-GPU
+
+Automatically detects GPU count
+
+Trains each CV fold on a separate GPU
+
+Performs parallel prediction
+
+Single-GPU
+
+Runs full training sequentially on the specified GPU
+
+Multi-CPU
+
+Parallel CV and prediction via multiprocessing
+
+Single-CPU
+
+Fully sequential, slowest mode
+
+Provided for compatibility
+
+Input / Output
+Inputs
+
+CSV files for:
+
+Features (e.g., flood drivers)
+
+Targets (e.g., total water levels)
+
+Outputs
+
+Trained GPR model
+
+Prediction arrays
+
+Log files including:
+
+Hardware selection
+
+Training duration
+
+Cross-validation metrics
 
 Prediction timing
 
-Model is trained using 80% of the input data; 20% is used for testing.
+Modeling Details
 
-⚙️ Notes
-The number of GPUs is detected automatically with torch.cuda.device_count().
+Exact GPR using RBF kernels, Matérn kernels, or custom kernels
 
-The script is adapted from the GPyTorch example on Multi-GPU Exact GP Regression.
+Leverages GPyTorch lazy tensors (no DataParallel)
 
-📄 License
-This software is free to use and distribute. There is no warranty for fitness or merchantability.
+Includes memory-optimized data loaders
 
-📌 Project Structure
-bash
-Copy
-Edit
-.
-├── multi_gpu_gp_regression.py     # Main script
-├── Forcing_750sim_SF.csv          # Input features for training
-├── TWL_750sim_SF.csv              # Output values for training
-├── Inputs_GPR_predict_10yr_sim_1.csv  # Input features for prediction
-├── LBFGS.py                       # Custom L-BFGS optimizer
-└── README.md
-🙋 Support
-For questions or collaboration inquiries, contact zhenqiang.wang@oregonstate.edu.
+Supports large-scale hydrodynamic surrogate modeling workflows
 
+Example Application
+
+The script has been used for:
+
+High-resolution compound flood prediction
+
+Multi-fidelity surrogate modeling
+
+Long-duration environmental time series emulation
+
+Calibration and skill assessment of diffusion-based flood surrogates
+
+References
+
+This work builds on the GPU-accelerated GPR concepts developed in earlier MATLAB implementations:
+
+Wang et al., Hybrid Statistical–Dynamical Framework for Compound Coastal Flooding
+
+Wang et al., Surrogate Modeling for Probabilistic Flood Hazard Assessment
+
+Contact
+
+Author: Zhenqiang Wang
+Affiliation: Oregon State University
+Email: zhenqiang.wang@oregonstate.edu
