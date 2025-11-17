@@ -11,10 +11,12 @@ High-performance Exact Gaussian Process Regression implementation with true para
 
 - **Flexible Hardware Acceleration**: Interactive selection of Multi-GPU, Single-GPU, Multi-CPU, or Single-CPU execution
 - **True Parallel Processing**: Uses `ProcessPoolExecutor` for genuine parallelism across devices during both training and prediction
+- **Smart Parallelization**: Automatically detects when process spawning overhead dominates computation time and switches to sequential processing (optimal for datasets <2000 samples)
+- **Platform-Optimized**: Fast 'forkserver' on Linux/HPC for rapid process creation; 'spawn' on Windows for CUDA compatibility
 - **Adaptive Performance**: Automatic batch sizing and memory optimization based on dataset size
-- **Comprehensive Grid Search**: Tests multiple kernels, optimizers, and hyperparameters with parallel cross-validation
+- **Comprehensive Grid Search**: Tests multiple kernels, optimizers, and hyperparameters with intelligent parallel/sequential switching
 - **Production Ready**: Robust error handling, model persistence, and detailed logging
-- **HPC Compatible**: Platform-aware CSV reading and non-interactive plotting for batch job environments
+- **HPC Compatible**: Platform-aware CSV reading (C engine on Linux, Python engine on Windows) and non-interactive plotting for batch job environments
 
 ## 📊 Performance Highlights
 
@@ -136,7 +138,7 @@ Supported optimizers with automatic hyperparameter tuning:
 - Adadelta
 - LBFGS
 
-### Training Parameters, e.g., 
+### Example Training Parameters
 
 ```python
 learning_rate_options = [0.1]
@@ -320,7 +322,6 @@ If you use this code in your research, please cite:
   pages={3},
   year={2025},
   publisher={Nature Publishing Group UK London}
-}
 }
 ```
 
